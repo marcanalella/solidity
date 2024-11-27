@@ -1,2 +1,3 @@
-# ethereum-projects
-Some Ethereum projects
+# Ethereum projects
+
+Some Ethereum projects for practice and mastering Solidity knowledge
