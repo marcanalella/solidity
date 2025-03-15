@@ -1,47 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
-
+import {PriceConverter} from "./PriceConverter.sol";
 
 contract FundMe {
 
+    using PriceConverter for uint256;
+
     uint256 public minimumUsd = 5e18;
 
-    uint256 public minimumEur = 4e18;
-
-    uint256 public lastPriceEUR;
-
-    uint256 public lastPriceUSD;
-
-    uint256 public lastPriceEUROffChain;
-
-    uint256 public lastPriceUSDOffChain;
-
-    AggregatorV3Interface internal ethUsdDataFeed;
-
-    AggregatorV3Interface internal eurUsdDataFeed;
-
     address[] public funders;
+    
     mapping(address funder => uint256 amountFunded) public addressToAmountFunded;
 
-    constructor() {
-        ethUsdDataFeed = AggregatorV3Interface(
-            0x694AA1769357215DE4FAC081bf1f309aDC325306
-        );
-
-        eurUsdDataFeed = AggregatorV3Interface(
-            0x1a81afB8146aeFfCFc5E50e8479e826E7D55b910
-        );
-    }
-
     //payable make possible to take fund to the contract like a wallet
-    function fund(string memory currency) public payable {
+    function fund() public payable {
        
-        require(getSupportedCurrency(currency), "Currency not supported, you have wasted your money in gas");
-
-        
-        require(isFundable(msg.value, currency), "Didn't send enought ETH");
         //1e18 = 1 ETH = 10000000000000000000 Wei
         // https://eth-converter.com/
         //What is a revert?
@@ -51,43 +25,13 @@ contract FundMe {
         //you can consider the transaction failed.
         //if you send a reverted transaction, you will spend gas.
 
+        //msg.value is passed as firtst input parameter to the funciton getConversionRate()
+        require(msg.value.getConversionRate() >= minimumUsd, "Didn't send enought ETH");
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] = addressToAmountFunded[msg.sender] + msg.value;
     
     }
-
-    function getEthUsdPrice() public returns(uint256) {
-        (, int256 price,,,) = ethUsdDataFeed.latestRoundData();
-        lastPriceUSDOffChain = uint256(price);
-        return uint256(price) * 1e10;
-    }
-
-        function getEurUsdPrice() public returns(uint256) {
-    
-        (, int256 price,,,) = eurUsdDataFeed.latestRoundData();
-        lastPriceEUROffChain = uint256(price);
-        return uint256(price) * 1e10;
-    }
-
-    function getConversionRate(uint256 ethAmount) public returns(uint256) {
-        uint256 ethPrice = getEthUsdPrice();
-        return (ethPrice * ethAmount) / 1e18;
-    } 
-
-    function getSupportedCurrency(string memory currency) internal pure returns(bool) {
-        return (compareStrings(currency, "EUR") || compareStrings(currency, "USD"));
-    }
-
-    function isFundable(uint256 ethAmount, string memory currency) internal returns(bool) {
-        if(compareStrings(currency, "EUR")) {
-
-            lastPriceEUR = (getConversionRate(ethAmount) / getEurUsdPrice());
-            return lastPriceEUR >= minimumEur;
-        } else {
-            lastPriceUSD = getConversionRate(ethAmount);
-            return lastPriceUSD >= minimumUsd;
-        }
-    }
+}
     
     //function withdraw() public {}
 
@@ -99,7 +43,6 @@ contract FundMe {
     //This function compares two strings by hashing them using the keccak256 cryptographic hash function 
     //and checking if the hash values are equal, returning a boolean indicating the comparison result.
 
-    function compareStrings(string memory a, string memory b) public pure returns (bool) {
-        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
-    }
-}
+    //function compareStrings(string memory a, string memory b) public pure returns (bool) {
+    //    return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+    //}
