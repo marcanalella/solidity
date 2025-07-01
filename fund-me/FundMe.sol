@@ -28,12 +28,35 @@ contract FundMe {
         //msg.value is passed as firtst input parameter to the funciton getConversionRate()
         require(msg.value.getConversionRate() >= minimumUsd, "Didn't send enought ETH");
         funders.push(msg.sender);
-        addressToAmountFunded[msg.sender] = addressToAmountFunded[msg.sender] + msg.value;
+        addressToAmountFunded[msg.sender] += msg.value;
     
     }
-}
     
-    //function withdraw() public {}
+    function withdraw() public {
+        for (uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++) {
+            address funderAddress = funders[funderIndex];
+            addressToAmountFunded[funderAddress] = 0;
+        }
+
+        //Clear the array after withdrawing to avoid any confusion
+        funders = new address[](0);
+
+        //https://solidity-by-example.org/sending-ether/
+        //msg.sender = address
+        //payable(msg.sender) = payable address
+
+        //3 ways to withdraw
+        // transfer
+        //payable(msg.sender).transfer(address(this).balance);
+        
+        // send
+        //bool sendSuccess = payable(msg.sender).send(address(this).balance);
+        //require(sendSuccess, "Send failed");
+        
+        // call
+        (bool callSuccess, /*bytes memory dataReturned*/) = payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call failed");
+    }
 
     //In Solidity, strings are essentially arrays of bytes (i.e., byte arrays). 
     //This means that direct comparison using equality operators won’t yield the desired result 
@@ -46,3 +69,4 @@ contract FundMe {
     //function compareStrings(string memory a, string memory b) public pure returns (bool) {
     //    return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     //}
+}
