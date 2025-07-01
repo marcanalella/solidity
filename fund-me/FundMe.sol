@@ -38,9 +38,7 @@ contract FundMe {
     
     }
     
-    function withdraw() public {
-        //only the owner can call this function
-        require(msg.sender == owner, "Must be the owner!");
+    function withdraw() public onlyOwner {
 
         for (uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++) {
             address funderAddress = funders[funderIndex];
@@ -78,4 +76,9 @@ contract FundMe {
     //function compareStrings(string memory a, string memory b) public pure returns (bool) {
     //    return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     //}
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Sender is not owner!");
+        _;
+    }
 }
