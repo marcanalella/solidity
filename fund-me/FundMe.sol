@@ -10,8 +10,14 @@ contract FundMe {
     uint256 public minimumUsd = 5e18;
 
     address[] public funders;
+
+    address public owner;
     
     mapping(address funder => uint256 amountFunded) public addressToAmountFunded;
+
+    constructor() {
+        owner = msg.sender;
+    }
 
     //payable make possible to take fund to the contract like a wallet
     function fund() public payable {
@@ -33,6 +39,9 @@ contract FundMe {
     }
     
     function withdraw() public {
+        //only the owner can call this function
+        require(msg.sender == owner, "Must be the owner!");
+
         for (uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++) {
             address funderAddress = funders[funderIndex];
             addressToAmountFunded[funderAddress] = 0;
