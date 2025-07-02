@@ -7,16 +7,16 @@ contract FundMe {
 
     using PriceConverter for uint256;
 
-    uint256 public minimumUsd = 5e18;
+    uint256 public constant MINIMUM_USD = 5e18;
 
     address[] public funders;
 
-    address public owner;
+    address public immutable i_owner;
     
     mapping(address funder => uint256 amountFunded) public addressToAmountFunded;
 
     constructor() {
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
 
     //payable make possible to take fund to the contract like a wallet
@@ -32,7 +32,7 @@ contract FundMe {
         //if you send a reverted transaction, you will spend gas.
 
         //msg.value is passed as firtst input parameter to the funciton getConversionRate()
-        require(msg.value.getConversionRate() >= minimumUsd, "Didn't send enought ETH");
+        require(msg.value.getConversionRate() >= MINIMUM_USD, "Didn't send enought ETH");
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] += msg.value;
     
@@ -78,7 +78,7 @@ contract FundMe {
     //}
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Sender is not owner!");
-        _;
+        require(msg.sender == i_owner, "Sender is not owner!");
+        _; //this indicate to continue the fuction after colling modifier
     }
 }
