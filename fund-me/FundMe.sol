@@ -79,6 +79,6 @@ contract FundMe {
 
     modifier onlyOwner() {
         require(msg.sender == i_owner, "Sender is not owner!");
-        _; //this indicate to continue the fuction after colling modifier
+        _; //this indicate to continue the fuction after calling modifier
     }
 }

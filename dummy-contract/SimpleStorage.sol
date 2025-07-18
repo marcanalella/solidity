@@ -28,6 +28,7 @@ contract SimpleStorage {
     function retrieve() public view returns(uint256) {
         return favoriteNumber;
     }
+    
     //calldata, memory -> it's only going to exist for the duration of
     //fuction call. The difference between them is that a memory variable can
     //be changed, can be manipulated.
