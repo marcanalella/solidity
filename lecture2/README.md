@@ -9,3 +9,5 @@ Requirements:
 4. Validate that user cannot register twice
 5. Add a view function to fetch user info
 6. Track registration timestamp using uint
+
+[View on Sepolia Blockscout](https://sepolia-blockscout.lisk.com/address/0x9Fd14a6BC6E6F6F6E5704AB22fe919919ed77bD6?tab=index)
