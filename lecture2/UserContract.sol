@@ -2,14 +2,13 @@
 pragma solidity ^0.8.18;
 
 /*My solution to Week 1 Lecture 2 - Solidity Fundamentals 
-This Solidity contract manages user registration, profile updates, and retrieval using a struct and 
-mappings. It ensures each user registers with a unique, valid email and non-empty name. 
-User data is stored in both a public array and a private mapping for quick access. 
-Validation checks prevent duplicate emails and empty inputs. A helper function confirms b
-asic email format by checking for the "@" character. Though efficient in logic, 
-the contract retains a redundant users array solely for checking email uniqueness, 
+This Solidity contract manages user registration, profile updates, and retrieval using a struct and mappings. 
+It ensures each user registers with a unique, valid email and non-empty name. 
+User data is stored in a private mapping. 
+Validation checks prevent duplicate emails and empty inputs. 
+A helper function confirms basic email format by checking for the "@" character. 
+Though efficient in logic, the contract retains a users array solely for checking email uniqueness, 
 which could be optimized using a mapping for better performance and gas efficiency.*/
-
 
 contract UserContract {
 
@@ -20,7 +19,7 @@ contract UserContract {
         uint256 updatedAt;
     }
     
-    User[] public users;
+    User[] private users;
 
     mapping(address => User) private addressToUser;
 
@@ -82,5 +81,4 @@ contract UserContract {
         }
         return false;
     }
-
 }
