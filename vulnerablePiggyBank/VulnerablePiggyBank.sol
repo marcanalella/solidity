@@ -9,7 +9,15 @@ contract VulnerablePiggyBank {
 
     function deposit() public payable {}
 
-    function withdraw() public { payable(msg.sender).transfer(address(this).balance); }
+    //No access control: Anyone can call withdraw() and drain the balance, not just the owner.
+    function withdraw() public { 
+        //Added require(msg.sender == owner) to restrict withdraw() access.
+        require(msg.sender == owner, "Only owner can withdraw");
+        payable(msg.sender).transfer(address(this).balance); 
+    }
 
-    function attack() public { }
+    // Simulated attack: contract withdraws all funds to itself
+    function attack() public {
+        withdraw(); // Steals the balance by calling the unprotected withdraw, now not working anymore
+     }
 }
