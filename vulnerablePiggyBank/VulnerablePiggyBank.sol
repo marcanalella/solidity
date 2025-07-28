@@ -7,7 +7,12 @@ contract VulnerablePiggyBank {
 
     constructor() { owner = msg.sender; }
 
-    function deposit() public payable {}
+    //Restricting deposits to the owner makes sense becouse the contract is used as a personal or private vault.
+    //We want to avoid accidental or malicious deposits from third parties.
+    function deposit() public payable {
+        require(msg.sender == owner, "Only owner can deposit");
+        require(msg.value > 0, "Cannot deposit 0 ETH");
+    }
 
     //No access control: Anyone can call withdraw() and drain the balance, not just the owner.
     function withdraw() public { 
