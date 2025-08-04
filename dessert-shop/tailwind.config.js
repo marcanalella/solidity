@@ -1,8 +1,5 @@
 module.exports = {
-    content: [
-        './index.html',
-        './src/**/*.{js,jsx,ts,tsx}'
-    ],
+    content: ['./index.html', './src/**/*.{js,jsx}'],
     theme: {
         extend: {
             colors: {
@@ -11,7 +8,7 @@ module.exports = {
                 'secondary-orange': '#d7673c',
                 'gray-text': '#4a4a4a',
                 'light-gray-text': '#8c8c8c',
-                'border-orange': '#ffe2d4',
+                'confirm-button': '#9e3b2e'
             },
         },
     },
