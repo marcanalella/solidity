@@ -96,7 +96,7 @@ export default function Cart() {
                             </div>
                             <button
                                 onClick={handleConfirmOrder}
-                                className="w-full bg-confirm-button text-white py-3 rounded-full hover:bg-red-800 transition font-semibold"
+                                className="w-full bg-confirm-button text-black py-3 rounded-full hover:bg-red-800 transition font-semibold"
                             >
                                 Confirm Order
                             </button>
