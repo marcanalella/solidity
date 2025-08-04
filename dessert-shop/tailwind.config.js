@@ -1,12 +1,7 @@
-// tailwind.config.js
 module.exports = {
-    // This 'content' array tells Tailwind to scan these files for utility classes.
-    // The glob patterns must be correct for your project structure.
     content: [
         './index.html',
-        './src/**/*.{js,jsx,ts,tsx}', // Make sure this is correct for your files.
-        // The previous code had './src/**/*.{js,jsx}', which should be fine,
-        // but I've expanded it to be more comprehensive.
+        './src/**/*.{js,jsx,ts,tsx}'
     ],
     theme: {
         extend: {

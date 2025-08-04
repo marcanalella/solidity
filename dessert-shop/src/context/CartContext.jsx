@@ -12,7 +12,7 @@ export function CartProvider({ children }) {
         const numericPrice = parseFloat(product.price);
         if (isNaN(numericPrice)) {
             console.error("Product price is not a number:", product);
-            return; // Don't add if the price is invalid
+            return;
         }
 
         setCart((prevCart) => {

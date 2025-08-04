@@ -2,7 +2,6 @@ import { useCart } from '../context/CartContext';
 import { Trash2 } from 'lucide-react';
 
 const EmptyCartSVG = () => (
-    // ... (SVG content remains the same)
     <svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
             fillRule="evenodd"
@@ -27,6 +26,8 @@ export default function Cart() {
     const { cart, removeFromCart, getTotal } = useCart();
     const total = getTotal();
 
+    console.log('Current Cart:', cart);
+
     return (
         <aside className="bg-white rounded-2xl shadow-md p-6 w-full lg:w-80 flex-shrink-0 h-fit">
             <h2 className="text-xl font-bold text-primary-orange mb-4">Your Cart ({cart.length})</h2>
@@ -38,8 +39,8 @@ export default function Cart() {
             ) : (
                 <div className="flex flex-col h-full">
                     <ul className="mt-2 divide-y divide-gray-100">
-                        {cart.map((item) => (
-                            <li key={item.id} className="py-3 text-sm flex items-start justify-between">
+                        {cart.map((item, index) => (
+                            <li key={item.id || index} className="py-3 text-sm flex items-start justify-between">
                                 <div className="flex-1">
                                     <p className="font-medium text-gray-text">{item.name}</p>
                                     <div className="flex items-center space-x-2 text-xs text-gray-400 mt-1">
@@ -49,7 +50,7 @@ export default function Cart() {
                                     </div>
                                 </div>
                                 <button
-                                    onClick={() => removeFromCart(item.id)} // This is the change
+                                    onClick={() => removeFromCart(item.id)}
                                     className="ml-4 text-gray-400 hover:text-primary-orange transition-colors"
                                 >
                                     <Trash2 size={16} />
